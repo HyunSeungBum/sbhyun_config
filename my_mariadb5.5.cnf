@@ -1,14 +1,14 @@
-# 이 파일은 MySQL 5.6.5-m8 x86_64 기준으로 작성되었습니다.
+# 이 파일은 mariadb5.5 x86_64 기준으로 작성되었습니다.
 # http://dev.mysql.com/doc/refman/5.6/en/server-system-variables.html 를 참조 하였습니다.
 # 저장소에서 구하실 수 있습니다. https://github.com/HyunSeungBum/sbhyun_config.git
 # cd /usr/local
 # chgrp mysql -R mariadb5.5; cd mariadb5.5
 # mkdir logs tmp
-# chown maria.maria logs; chown maria.maria tmp
-# chown maria.maria -R data
+# chown mysql.mysql logs; chown maria.maria tmp
+# chown mysql.mysql -R data
 # cd data
 # mkdir InnoDB; mkdir InnoDB/redoLogs; mkdir InnoDB/undoLogs
-# chown maria.maria -R InnoDB
+# chown mysql.mysql -R InnoDB
 
 [mysqld]
 ##--------------------------------------------------------------------
