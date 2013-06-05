@@ -137,6 +137,7 @@ general_log_file = /usr/local/mariadb5.5/logs/general_query_all.log
 log-slow-admin-statements = 1
 
 # 인덱스를 타지 않는 Full Scan 과 같은 쿼리에 대해서 로깅을 한다.
+# long_query_time보다 적게 걸릴 경우에도 색인을 사용하지 않는 질의를 기록한다.
 # 기본값 0
 # Dynamic 설정을 할수 있다. SET GLOBAL log-queries-not-using-indexes = 1
 log-queries-not-using-indexes = 1
