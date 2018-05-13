@@ -1,0 +1,675 @@
+# 이 파일은 MySQL 8.0.11 x86_64 기준으로 작성되었습니다.
+# http://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html 를 참조 하였습니다.
+# 저장소에서 구하실 수 있습니다. https://github.com/HyunSeungBum/sbhyun_config.git
+# cd /opt
+# chgrp mysql -R mysql-8.0.11; cd mysql-8.0.11
+# mkdir logs run
+# chown mysql.mysql logs; chown mysql.mysql run
+# mkdir -p /mnt/dbstorage/InnoDB/redoLogs
+# mkdir -p /mnt/dbstorage/InnoDB/undoLogs
+# mkdir -p /mnt/dbstorage/InnoDB/tmp
+# mkdir -p /mnt/dbstorage/mysql/tmp
+# mkdir -p /mnt/dbstorage/mysql/data
+# mkdir -p /mnt/dbstorage/mysql/binlog
+# mkdir -p /mnt/dbstorage/mysql/logs
+# chown -R mysql: /mnt/dbstorage
+
+[mysqld]
+##--------------------------------------------------------------------
+# mysqld 의 기본 설정들.
+##--------------------------------------------------------------------
+# id 는 1 에서 2^32 -1 개 사이에 유일한 값이여 한다.
+# server-id 는 복제 그룹을 구성할 경우에 중복된 값이여서는 않된다.
+# 단일 시스템일 경우 기본값 1 이면 충분하다.
+server-id = 1
+
+# 서버를 구동할 시스템 사용자 지정.
+user = mysql
+basedir = /opt/mysql
+# 이 디렉토리의 소유권과 그룹은 user 에서 지정한 사용자와 그룹이어야 한다.
+datadir = /mnt/dbstorage/mysql/data
+# 이 디렉토리는 Mysql 서버가 내부적 작업을 할때 임시로 사용하게 된다.
+# 예를들어 대량의 select 처리를 위해서 임시 테이블을 만들거나 할 경우에 여기에 임시로 파일이 생성될 수 있다.
+tmpdir  = /mnt/dbstorage/mysql/tmp
+socket  = /opt/mysql/run/mysql.sock
+pid-file = /opt/mysql/run/mysqld.pid
+# 외부 락킹(locking), 시스템 락킹, 을 사용하지 않도록 한다. 이 설정은 오직 MyISAM 테이블에 접근할때만 영향을 준다.
+skip-external-locking
+
+# 문자셋 지정.
+character-set-server = utf8
+collation-server = utf8_general_ci
+
+# 기본 스토리지 엔진.
+# MySQL 서버가 지원하는 스토리지 엔진중에 하나를 선택할 수 있다.
+# 서버가 지원하는 스토리지 엔진은 'SHOW ENGINES' 명령어를 이용해 확인 가능하다.
+default-storage-engine  = InnoDB
+
+##--------------------------------------------------------------------
+# Network 설정.
+##--------------------------------------------------------------------
+# 서버 포트 지정.
+port = 3306
+
+# 서버에 접속한 클라이언트 확인을 위해서 IP를 가지고 클라이언트의 도메인을 찾는 것을 방지한다.
+# 이것을 사용하면 서버에 접속가능한 클라이언트를 정의할때에 Host 필드에 도메인을 사용하면 않되며
+# IP만 사용해야 한다. 대신 클라이언트의 도메인을 찾는 작업이 없기 때문에 성능상에 이점이 있다.
+skip-name-resolve
+
+# 최대 동시 접속 연결을 지정. 무턱대고 크게 잡을게 아니라 적절하게 잡아야 한다.
+# 이 값을 초과하면 "Too many connections error" 메시지를 보여준다.
+# Dynamic 설정을 할수 있다. SET GLOBAL max_connections = 300
+max_connections = 30
+
+# MySQL 서버에 접속하는 사용자 계정별 최대 동시접속 수. 기본값은 0(Unlimited) 이다.
+# Dynamic 설정을 할수 있다. SET GLOBAL max_user_connections = 1024
+max_user_connections = 0
+
+# MySQL 서버에 접속한 클라이언트들은 다양한 에러를 발생시킨다. 서버는 이러한 클라이언트별 오류 갯수를 카운팅해 놓는데,
+# 만일 클라이언트가 일정한 카운팅을 넘어서면 서버는 클라이언트의 접속을 차단한다.
+# 클라이언트가 발생시킬 수 있는 에러의 한계치를 조정하기 위한 설정이다. 기본 값은 10 이다.
+# 이 카운터에 도달하면 "Host [client] is blocked because of many connection errors" 에러를 발생시킨다.
+# Dynamic 설정을 할수 있다. SET GLOBAL max_connect_errors = 1000000
+# 이 카운터의 초기화는 FLUSH HOSTS 해주면 된다.
+max_connect_errors = 1000000
+
+
+# 문자셋 지정.
+character-set-server = utf8
+collation-server = utf8_general_ci
+
+# 기본 스토리지 엔진.
+# MySQL 서버가 지원하는 스토리지 엔진중에 하나를 선택할 수 있다.
+# 서버가 지원하는 스토리지 엔진은 'SHOW ENGINES' 명령어를 이용해 확인 가능하다.
+default-storage-engine  = InnoDB
+
+##--------------------------------------------------------------------
+# Network 설정.
+##--------------------------------------------------------------------
+# 서버 포트 지정.
+port = 3306
+
+# 서버에 접속한 클라이언트 확인을 위해서 IP를 가지고 클라이언트의 도메인을 찾는 것을 방지한다.
+# 이것을 사용하면 서버에 접속가능한 클라이언트를 정의할때에 Host 필드에 도메인을 사용하면 않되며
+# IP만 사용해야 한다. 대신 클라이언트의 도메인을 찾는 작업이 없기 때문에 성능상에 이점이 있다.
+skip-name-resolve
+
+# 최대 동시 접속 연결을 지정. 무턱대고 크게 잡을게 아니라 적절하게 잡아야 한다.
+# 이 값을 초과하면 "Too many connections error" 메시지를 보여준다.
+# Dynamic 설정을 할수 있다. SET GLOBAL max_connections = 300
+max_connections = 30
+
+# MySQL 서버에 접속하는 사용자 계정별 최대 동시접속 수. 기본값은 0(Unlimited) 이다.
+# Dynamic 설정을 할수 있다. SET GLOBAL max_user_connections = 1024
+max_user_connections = 0
+
+# MySQL 서버에 접속한 클라이언트들은 다양한 에러를 발생시킨다. 서버는 이러한 클라이언트별 오류 갯수를 카운팅해 놓는데,
+# 만일 클라이언트가 일정한 카운팅을 넘어서면 서버는 클라이언트의 접속을 차단한다.
+# 클라이언트가 발생시킬 수 있는 에러의 한계치를 조정하기 위한 설정이다. 기본 값은 10 이다.
+# 이 카운터에 도달하면 "Host [client] is blocked because of many connection errors" 에러를 발생시킨다.
+# Dynamic 설정을 할수 있다. SET GLOBAL max_connect_errors = 1000000
+# 이 카운터의 초기화는 FLUSH HOSTS 해주면 된다.
+max_connect_errors = 1000000
+
+# 문자셋 지정.
+character-set-server = utf8
+collation-server = utf8_general_ci
+
+# 기본 스토리지 엔진.
+# MySQL 서버가 지원하는 스토리지 엔진중에 하나를 선택할 수 있다.
+# 서버가 지원하는 스토리지 엔진은 'SHOW ENGINES' 명령어를 이용해 확인 가능하다.
+default-storage-engine  = InnoDB
+
+##--------------------------------------------------------------------
+# Network 설정.
+##--------------------------------------------------------------------
+# 서버 포트 지정.
+port = 3306
+
+# 서버에 접속한 클라이언트 확인을 위해서 IP를 가지고 클라이언트의 도메인을 찾는 것을 방지한다.
+# 이것을 사용하면 서버에 접속가능한 클라이언트를 정의할때에 Host 필드에 도메인을 사용하면 않되며
+# IP만 사용해야 한다. 대신 클라이언트의 도메인을 찾는 작업이 없기 때문에 성능상에 이점이 있다.
+skip-name-resolve
+
+# 최대 동시 접속 연결을 지정. 무턱대고 크게 잡을게 아니라 적절하게 잡아야 한다.
+# 이 값을 초과하면 "Too many connections error" 메시지를 보여준다.
+# Dynamic 설정을 할수 있다. SET GLOBAL max_connections = 300
+max_connections = 30
+
+# MySQL 서버에 접속하는 사용자 계정별 최대 동시접속 수. 기본값은 0(Unlimited) 이다.
+# Dynamic 설정을 할수 있다. SET GLOBAL max_user_connections = 1024
+max_user_connections = 0
+
+# MySQL 서버에 접속한 클라이언트들은 다양한 에러를 발생시킨다. 서버는 이러한 클라이언트별 오류 갯수를 카운팅해 놓는데,
+# 만일 클라이언트가 일정한 카운팅을 넘어서면 서버는 클라이언트의 접속을 차단한다.
+# 클라이언트가 발생시킬 수 있는 에러의 한계치를 조정하기 위한 설정이다. 기본 값은 10 이다.
+# 이 카운터에 도달하면 "Host [client] is blocked because of many connection errors" 에러를 발생시킨다.
+# Dynamic 설정을 할수 있다. SET GLOBAL max_connect_errors = 1000000
+# 이 카운터의 초기화는 FLUSH HOSTS 해주면 된다.
+max_connect_errors = 1000000
+
+
+
+# 문자셋 지정.
+character-set-server = utf8
+collation-server = utf8_general_ci
+
+# 기본 스토리지 엔진.
+# MySQL 서버가 지원하는 스토리지 엔진중에 하나를 선택할 수 있다.
+# 서버가 지원하는 스토리지 엔진은 'SHOW ENGINES' 명령어를 이용해 확인 가능하다.
+default-storage-engine  = InnoDB
+
+##--------------------------------------------------------------------
+# Network 설정.
+##--------------------------------------------------------------------
+# 서버 포트 지정.
+port = 3306
+
+# 서버에 접속한 클라이언트 확인을 위해서 IP를 가지고 클라이언트의 도메인을 찾는 것을 방지한다.
+# 이것을 사용하면 서버에 접속가능한 클라이언트를 정의할때에 Host 필드에 도메인을 사용하면 않되며
+# IP만 사용해야 한다. 대신 클라이언트의 도메인을 찾는 작업이 없기 때문에 성능상에 이점이 있다.
+skip-name-resolve
+
+# 최대 동시 접속 연결을 지정. 무턱대고 크게 잡을게 아니라 적절하게 잡아야 한다.
+# 이 값을 초과하면 "Too many connections error" 메시지를 보여준다.
+# Dynamic 설정을 할수 있다. SET GLOBAL max_connections = 300
+max_connections = 30
+
+# MySQL 서버에 접속하는 사용자 계정별 최대 동시접속 수. 기본값은 0(Unlimited) 이다.
+# Dynamic 설정을 할수 있다. SET GLOBAL max_user_connections = 1024
+max_user_connections = 0
+
+# MySQL 서버에 접속한 클라이언트들은 다양한 에러를 발생시킨다. 서버는 이러한 클라이언트별 오류 갯수를 카운팅해 놓는데,
+# 만일 클라이언트가 일정한 카운팅을 넘어서면 서버는 클라이언트의 접속을 차단한다.
+# 클라이언트가 발생시킬 수 있는 에러의 한계치를 조정하기 위한 설정이다. 기본 값은 10 이다.
+# 이 카운터에 도달하면 "Host [client] is blocked because of many connection errors" 에러를 발생시킨다.
+# Dynamic 설정을 할수 있다. SET GLOBAL max_connect_errors = 1000000
+# 이 카운터의 초기화는 FLUSH HOSTS 해주면 된다.
+max_connect_errors = 1000000
+
+# 접속한 클라이언트가 아무런 일을 하지 않을 경우에 차단할 시간. 단위는 초이며 기본값은 28800초(8시간)이다.
+# 웹에 붙여서 사용할 경우에 대부분의 30초 내외로 웹서버의 커넥션 타임이 정해져 있기 때문에 기본값은 매우 큰 값이라고 할 수 있다.
+# Dynamic 설정을 할수 있다. SET GLOBAL wait_timeout = 600
+wait_timeout = 600
+
+# 비활성 상태에서 활성상태가 될때까지 대기시간.(seconds to waits for activity on interactive connection)
+# 이것은 오직 MySQL API 중에 mysql_real_connect() 함수를 사용하는 애플리케이션에만 적용된다. 단위는 초이며 기본값은 600 이다.
+# Dynamic 설정을 할수 있다. SET GLOBAL interactive_timeout = 600
+interactive_timeout = 600
+
+# 'Bad handshake'로 응답하기전 패킷접속을 기달리는 시간.
+# "Lost connection to MySQL server at 'XXX', system error: errno" 메시지가 자주 보인다면 이 값을 증가시켜줄 필요가 있다.
+# 단위는 초, 기본값은 10 이다.
+# Dynamic 설정을 할수 있다. SET GLOBAL connect_timeout = 10
+connect_timeout = 10
+
+# 클라이언트에서 서버로 보내는 쿼리는 단 한개의 패킷으로 처리된다. 만일 서버로 보내는 쿼리의 크기가 이 값보다 작다면 늘려줘야 한다.
+# 특히 테이블 컬럼에 BLOB 타입을 사용할 경우, 그림같은 바이너리 값, 이 값을 증가시켜줄 필요가 있다.
+# 현재 max 값인 1G로 설정하여 최대한 제한이 없도록 한다.
+# 패킷 메시지 버퍼는 처음에 net_buffer_length 로 초기화 되고 필요에 의해 max_allowd_packet 사이즈(bytes) 까지 늘어나게 된다. (large packet 이 들어오기 전까지는 작게 할당됨)
+# [mysqld] 이외에도 [client] 의 설정도 동일하게 늘려줘야 한다. 필요하다면 [mysqldump] 에도 늘려준다.
+# 단위는 byte, 기본값은 4194304(4MB) 이다. 한계값은 1GB 이다.
+# Dynamic 설정을 할수 있다. SET GLOBAL max_allowed_packet = 1048576
+max_allowed_packet = 1073741824
+
+##--------------------------------------------------------------------
+# Replication
+##--------------------------------------------------------------------
+
+# 기본값: 없음.
+slave_type_conversions = ALL_NON_LOSSY
+
+##--------------------------------------------------------------------
+# Bin Log and Replication
+##--------------------------------------------------------------------
+
+# sync_binlog 는 어떻게 MySQL이 binlog 를 디스크로 플러시(flush)하는지를 제어한다. 
+# 새로운 값 1은 MySQL에게 커밋(Commit) 하는 동안 모든 트랜잭션들을 디스크로 쓰도록 강제한다. 
+# 0 은 binlog 를 플러싱하도록 강제하지 않고 OS에게 넘긴다. 
+# 기본값은 1
+# Dynamic 설정을 할수 있다. SET GLOBAL sync_binlog = 1
+sync_binlog = 1
+
+# Binary logging 포맷을 정한다. 
+# 이 설정은 --replicate-do-db, --replicate-ignore-db, --binlog-do-db, --binlog-ignore-db 에 영향을 준다.
+# Dynamic 설정을 할수 있다. SET GLOBAL binglog_format = ROW
+binlog_format = ROW
+
+# Binary logging 활성화.
+# --log-bin 커맨드를 이용할 경우에는 파일경로와함께 파일명을 주어야 하며
+# 커맨드를 이용하지 않을 경우에 log_bin 은 활성화/비활성 용도로 사용된다.
+# Dynamic 설정을 할 수 없다.
+log_bin = /mnt/dbstorage/mysql/binlog/localhost-01-bin
+
+# Binary log 파일 이름을 정한다.
+# 파일의 경로와 함께 파일명을 지정하면 된다.
+# 기본값: datadir + '/' + hostname + '-bin'
+# Dynamic 설정을 할수 없다.
+#log_bin_basename = /mnt/dbstorage/mysql/binlog/localhost-01-bin
+
+# 트랜잭션 중에 바이너리 로그를 변경하기 위한 캐쉬의 크기.
+# 서버가 트랜잭션 저장 엔진을 지원하고 서버의 바이너리 로그가 
+# 활성화된 경우 각 클라이언트에 대한 바이너리 로그 캐쉬가 할당된다.
+binlog_cache_size = 16777216
+
+# 최대 바이너리 로그 파일 크기. 
+# 최대 1GB 설정 가능하면 기본값도 1GB 이다.
+max_binlog_size = 1073741824
+
+# 바이너리 로그 파일은 최대 1GB 용량을 넘어서면
+# 다른 파일을 생성한다. binlog_expire_logs_seconds 는 이렇게 생성된
+# 파일들에 보관 기간을 설정한다. 
+# 기본값: 0 (보관기간 없음). 
+# Dynamic 설정할 수 있다. SET GLOBAL binlog_expire_logs_seconds = 2592000
+# 30 days (30*24*60*60 seconds)
+binlog_expire_logs_seconds = 2592000
+
+##--------------------------------------------------------------------
+# Logging
+##--------------------------------------------------------------------
+
+# 제너럴 쿼리 로그(general query log)와 슬로우 쿼리 로그(slow query log)의 출력 목적지를 결정한다.
+# 이 옵션은 다른 어떤 옵션들을 덮습니다. 이 값이 NONE 이라면 다른 옵션에서 로그기록을 설정했어도 로그는 기록되지 않습니다.
+# Dynamic 설정을 할수 있다. SET GLOBAL log_output = FILE
+log_output = FILE
+
+# Error, warning, note messages 를 에러로그에 쓰도록 한다. 
+# 기본값은 3(Error, warning, and note messages)
+# Dynamic 설정을 할수 있다. SET GLOBAL log_error_verbosity = 2
+log_error_verbosity = 3
+
+# 에러나 시작 메시지 로그 파일을 지정.  파일명을 지정하지 않을 경우 host_name.err 를 사용하며 확장자를 지정하지 않으면 .err 를 붙인다.
+# 기본값은 없으며 Dynamic 설정을 할 수 없다.
+log_error = /mnt/dbstorage/mysql/logs/mysqld_error.log
+
+# 제너럴 쿼리 로그(general query log) 의 사용 유무를 결정. log_output 값이 NONE 이라면 이 값은 무시됩니다.
+# 기본값은 0(0)
+# Dynamic 설정을 할수 있다. SET GLOBAL log_output = 0
+general_log = 1
+
+# 모든 쿼리를 로그로 기록하기위한 파일을 지정. 쿼리로그 혹은 제너럴 로그라고 한다.
+# 파일명을 지정하지 않으면 host_name.log 가 된다.
+# Dynamic 설정을 할수 있다. SET GLOBAL general_log_file = /usr/local/mysql5.6/logs/general_query_all.log
+general_log_file = /mnt/dbstorage/mysql/logs/general_query_all.log
+
+# "OPTIMIZE TABLE, ANALYZE TABLE, and ALTER TABLE" 과 같은 관리명령에 대해서도 slow query 를 남길지 결정
+# 기본값은 0
+# Dynamic 설정이 아니다.
+log-slow-admin-statements = 1
+
+# 인덱스를 타지 않는 Full Scan 과 같은 쿼리에 대해서 로깅을 한다.
+# 기본값 0
+# Dynamic 설정을 할수 있다. SET GLOBAL log-queries-not-using-indexes = 1
+log-queries-not-using-indexes = 1
+
+# 슬로우 쿼리 로그를 기록할지 말지를 결정. log_output 값이 NONE 이라면 이 값은 무시됩니다.
+# 기본값 0
+# Dynamic 설정을 할수 있다. SET GLOBAL slow_query_log = 0
+slow_query_log = 1
+
+# 슬로우 쿼리를 기록할 시간을 지정. 이 시간보다 크면 기록된다.
+# 값은 0 ~ 10 사이이다.
+# 기본값은 10.
+# Dynamic 설정을 할수 있다. SET GLOBAL long_query_time = 1
+long_query_time = 2
+
+# 슬로우 쿼리 로그 파일 지정.
+# 로그 파일명을 명시하지 않으면 host_name-slow.log 로 됩니다.
+# Dynamic 설정을 할수 있다. SET GLOBAL slow_query_log_file = /usr/local/mysql5.6/logs/slow_query.log
+slow_query_log_file = /mnt/dbstorage/mysql/logs/slow_query.log
+
+##--------------------------------------------------------------------
+# 캐쉬와 메모리
+##--------------------------------------------------------------------
+# 재사용을 위한 쓰레드를 서버가 얼마나 가지고 있어야 하는 지정하는 것.
+# 클라이언트가 접속요청을 하면 서버는 이를 처리할 프로세스로 쓰레드를 생성한다. 접속이 완료되면 모든 작업들도 이 쓰레드를 통해서 이루어진다.
+# 만일 클라이언트가 모든 작업을 끝마치고 접속을 해제하면 쓰레드는 파기되어야 하지만 재사용을 하기 위해서 이를 보관해 둔다.
+# 동시접속자가 많을수록 이값을 늘려줄 필요가 있지만, 메모리 사용량도 증가할 수 있다.
+# 기본값은 0.
+# Dynamic 설정을 할수 있다. SET GLOBAL thread_cache_size = 52
+thread_cache_size = 52
+
+# 모든 쓰레드가 열어 캐쉬할 수 있는 테이블 개수. 이값을 증가시면 mysqld 는 file descriptors 를 증가 시킨다.
+# 기본값은 400.
+# Dynamic 설정을 할수 있다. SET GLOBAL table_open_cache = 400
+table_open_cache = 400
+
+# 이 값은 Memory 스토리지 엔진에도 영향을 준다. 이 변수의 값은 Memory 스토리지 엔진에서 MAX_ROWS 값을 계산해 사용하기도 한다.
+# 또, MySQL 서버가 쿼리를 처리하기 위해서 종종 사용하는 임시 테이블은 메모리에 생성되기도 한다.
+# 이때 생성되어지는 테이블은 Heap 테이블이라하는데, tmp_table_size 값과 함께 내부 Heap 테이블의 크기 제한에 영햐을 준다.
+# 단위는 byte. 기본값은 16777216(16MB) 이다.
+# Dynamic 설정을 할수 있다. SET GLOBAL max_heap_table_size = 16777216
+max_heap_table_size = 33554432
+
+# 메모리에 생성되어지는 임시 테이블 크기의 최대 값. 메모리에 생성되는 테이블의 크가 이 값을 넘어서면 MySQL은 디스크에 MyISAM 테이블로 변환한다.
+# 쿼리에 GROUP By 가 많고 메모리가 충분하다면 이 값을 증가시킬 필요가 있다.
+# 이 값은 사용자가 생성하는 Memory 테이블에는 영향을 주지 않는다.
+# 단위는 Byte. 기본값은 시스템에 의존적이다.
+# SHOW GLOBAL STATUS 에서 'Created_tmp_disk_tables' 와 'Created_tmp_tables' 에 대한 통계정보를 볼 수 있다.
+# Dynamic 설정을 할수 있다. SET GLOBAL tmp_table_size = 524288
+tmp_table_size = 524288
+
+# 각 섹션에서 정렬을 위해서 할당되는 버퍼의 크기. 이 값은 어떤 스토리지 엔진에서도 특화된것이 아닌, 최적화를 위해 일반적인 값이다.
+# SHOW GLOBAL STAUS 에서 초당 'Sort_merge_passes' 값이 많이 보인다면 쿼리를 개선하거나 인덱싱을 개선하는 대신에 이 값을 늘려보는 것도 좋다.
+# 그러나 2MB 이상 세팅하는 것은 권장하지 않으며 대부분 64KB ~ 512KB 사이가 적당하다.
+# 단위는 Byte. 기본값은 2MB 이다.
+# Dynamic 설정을 할수 있다. SET GLOBAL sort_buffer_size = 2097144
+sort_buffer_size = 2M
+
+# MyISAM 테이블에 대해서 각 쓰레드가 sequentail scan 을 할때에 이 값의 크기만큼 버퍼를 각 할당한다.
+# sequentail scan 이 자주 발생하면 이 값을 증가시킬 필요가 있다.
+# 4Kb 의 배수로 설정해야 한다. 5.1부터 MyISAM 테이블에 해당함(temp로 생성되는 MyISAM 포함)
+# 이 값을 단순하게 MyISAM 테이블에 적용된다고 생각하면 안된다.
+# InnoDB 에서 임시테이블을 생성할때에 MyISAM으로 변환된다. 이때 이 값이 적용될 수 있다.
+# 이 변수는 connection 당 할당 된다.
+# 단위는 Byte. 기본값은 131072 (128K) 이다.
+# Dynamic 설정을 할수 있다. SET GLOBAL read_buffer_size = 16777216
+read_buffer_size = 131072
+
+# MyISAM 테이블로부터 Key-sorting 정렬에 의한 데이터를 레코드에서 읽을때에 디스크에서 찾는것을 피하기 위해서 이 버퍼를 사용한다.
+# GROUP BY, ORER BY 를 많이 사용한다면 이 값을 증가시키면 성능향상이 있을 수 있다.
+# 또, 모든 스토리지 엔진에서 Multi-Range Read optimization 를 위해서 사용된다.
+# 정렬이 발생했을 때 sort buffer에 있는 내용을 random buffer 로 가져와서 
+# row pointer 순으로 정렬함으로써 디스크 row를 가져올 때 random I/O에서 sequential I/O로 변경해준다
+# 따라서 MyISAM을 안 쓴다고 무시하면 안된다.
+# 단위는 Byte. 기본값은 262144(256K) 이다.
+# Dynamic 설정을 할수 있다. SET GLOBAL read_rnd_buffer_size = 262144
+read_rnd_buffer_size = 262144
+
+# 최소값. index scans, range index scans 등을 계획하거나 조인하는데 index를 사용하지 못하고 풀 테이블 스캔을 조인을 해야할 경우에 사용되어 진다.
+# 인덱스를 추가해 조인을 할 수 없는 풀 조인을 해야한다면 이 값을 증가시킴으로써 보다 빠른 결과를 얻을 수 있다.
+# 이 변수는 connection 당 할당 된다.
+# 단위는 Byte.
+# Dynamic 설정을 할수 있다. SET GLOBAL join_buffer_size = 131072
+join_buffer_size = 131072
+
+##--------------------------------------------------------------------
+# MyISAM 
+##--------------------------------------------------------------------
+
+# MyISAM 테이블의 인덱스 블록(Index blocks)은 버퍼되어지고 모든 쓰레드에 공유된다.
+# 이 인덱스 블럭은 버퍼하기위한 메모리 양이다. 데이터베이스 전용 서버에 MyISAM 엔진만 사용할 경우
+# 전체 메모리의 25%를 할당해도 된다.
+# 단위는 Byte. 초기값은 8388608(8MB)
+# Dynamic 설정을 할수 있다. SET GLOBAL key_buffer_size = 131072
+key_buffer_size = 64M
+
+# bulk insert 는 INSERT ... SELECT, INSERT ... VALUES (..),(..),... , LOAD_DATA_INFILE 등을 말합니다.
+# 이때 사용되는 버퍼를 사용해서 속도를 높일 수 있습니다.
+# 단위는 Byte. 초기값은 8388608 (8MB)
+# Dynamic 설정을 할수 있다. SET GLOBAL bulk_insert_buffer_size = 131072
+bulk_insert_buffer_size = 33554432
+
+# CREATE INDEX, ALTE TABLE 등으로 인덱스를 생성하거나 REPAIR_TABLE 하는데에 인덱스 정렬이 필요할때에 필요한 버퍼.
+# 단위는 Byte. 초기값은 8388608 (8MB)
+# Dynamic 설정을 할수 있다. SET GLOBAL myisam_sort_buffer_size = 131072
+myisam_sort_buffer_size = 2097152
+
+# REPAIR_TABLE, ALTER_TABLE, LOAD_DATA_INFILE 중에 MyISAM 인덱스를 재생성해야 할 경우에 허용할 임시 파일 최대값.
+# 단위는 Byte. 초기값은 2147483648 (2GB)
+# Dynamic 설정을 할수 있다. SET GLOBAL myisam_max_sort_file_size = 131072
+myisam_max_sort_file_size = 2147483648
+
+# 예기치 못한 서버의 중단으로 서버가 재시작되었을때에 리커버리를 할지 결정하는 옵션.
+# 0, DEFAULT, BACKUP, FORCE, QUICK 값을 콤마(,)로 나열해서 사용할 수 있다.
+# 기본값은 0. 값을 주지 않으면 DEFAULT 이다.
+# Dynamic 설정을 할 수 없다.
+myisam_recover_options = DEFAULT
+
+##--------------------------------------------------------------------
+# InnoDB behavior
+##--------------------------------------------------------------------
+
+# 5.7 이후에 기본값이 Barracuda 로 바뀌었으며 
+# 가까운 미래에 없어질 것이다. 원래 이 옵션은 5.1 버전으로 다운그레이드를 위해서
+# 만들어졌으며 5.1 은 더 이상 지원을 하지 않게됨에 따라서 필요하지 않게 되었다. 
+# 기본값 Barracuda
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_file_format = Barracuda
+# 이미 존재하는 InnoDB 테이블스페이스 파일의 포맷에는 영향을 주지 않는다.
+# 모든 row format 테이블을 지원하는 general 테이블스페이스에는 적용되지 않는다.
+# DYNAMIC row format 을 사용해 테이블을 생성할 경우에는 innodb_file_format 옵션이 무시되고
+# 강제로 Barracuda 포맷을 사용한다.
+# COMPRESSED row format 은 반드시 Barracuda 로 지정해야 한다. 
+# innodb_file_format = Barracuda
+
+# InnoDB의 백그라운드 쓰레드인 I/O 쓰레드의 읽고 쓰기 쓰레드의 갯수를 정합니다.
+# innodb_read_io_threads 기본값 4
+# innodb_write_io_threads 기본값 4
+# Dynamic 설정을 할 수 없다.
+innodb_read_io_threads = 4
+innodb_write_io_threads = 4
+
+# "SHOW TABLE STATUS", "SHOW INDEX" 나 INFORMATION_SCHEMA의 테이블이나 통계를 InnoDB 업데이트 합니다.
+# 이 변수를 Disable 하게되면 큰 테이블이나 인덱스 스키마에 대한 접근 속도를 높일 수도 있습니다.
+# 이 변수를 Enable 하면 쿼리 플랜을 개선하는 도움을 줍니다.
+# 기본값은 1
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_stats_on_metadata = 1
+innodb_stats_on_metadata = 1
+
+# 인덱스된 컬럼을 위한 카디넬러티나 기타 통계를 계산할때 심플을 위한 인덱스 페이지 수를 지정.
+# 이러한 계산은 "ANALYZE TABLE" 명령어를 사용하면 행해짐.
+# 이 값을 높이면 query_execution_plain 개선을 위한 인덱스 통계의 정확도가 개선되지지만
+# InnoDB 테이블을 열거나 통계를 다시 게산할때에 I/O가 증가를 가중시킬 수 있다.
+# 기본값 8.
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_stats_transient_sample_pages = 8
+innodb_stats_transient_sample_pages = 12
+
+# dirty pages 의 퍼센티지를 넘지 않기 위해서 InnoDB는 buffer pool을 데이터 플러쉬(flush)를 시도합니다.
+# 말 그래도 innodb 에서 dirty pages 의 퍼센티지.
+# 기본값은 75
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_max_dirty_pages_pct = 75
+innodb_max_dirty_pages_pct = 90
+
+# InnoDB의 apaptive hash index 를 사용여부 결정.
+# adaptive hash index 기능은 몇몇 workload 에서 유용함.
+# 기본값은 1
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_adaptive_hash_index = 1
+innodb_adaptive_hash_index = 1
+
+# InnoDB buffer pool 에서 dirty pages 를 플러쉬하는 비율을 다이나믹하게 조절할지 마지 결정.
+# 버스트 I/O 활동을 피하기위한 목적으로 다이나믹하게 조절하는 것.
+# 기본값 1
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_adaptive_flushing = 1
+innodb_adaptive_flushing = 1
+
+# 특정 조건에 대해서 경고보다 에러를 리턴할지를 결정. strict SQL mode 와 유사합니다.
+# 기본값 0
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_strict_mode = 1
+innodb_strict_mode = 1
+
+# insert buffer 로부터 데이터를 머지(merge)하거나 buffer pool로부터 페이지를 플러쉬(flush)와 같은
+# InnoDB 백그라운드 태스크에 의해서 실행될때에 I/O 활성에 상계치(An upper limit) 설정.
+# 기본값 200
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_io_capacity = 200
+innodb_io_capacity = 600
+
+# auto-increment 값을 생성하는데 사용할 lock mode 결정.
+# 기본값은 1
+# Dynamic 설정을 할 수 없다.
+innodb_autoinc_lock_mode = 1
+
+# INSERT 가 발생되면 보조 인덱스가 바로 반영되지 않고 메모리에 버퍼링 되는데 이을 사용할지 말지를 결정.
+# 최근에는 inserts, deletes, purges, changes, all, none 으로 설정할 수 있게 됐다.
+# 기본값은 all.
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_change_buffering = inserts
+innodb_change_buffering = inserts
+
+# 이 값은 설명하기 어렵다. 뭐가 뭔지...
+innodb_old_blocks_time = 500
+
+##--------------------------------------------------------------------
+# InnoDB base
+##--------------------------------------------------------------------
+
+# InnoDB 가 테이블이나 인덱스 데이터를 캐쉬하기위한 메모리 영역에 버퍼 풀 사이즈.
+# 이 값을 크게 잡으면 디스크 I/O를 줄여준다.
+# InnoDB 전용 서버라면 물리적 메모리의 80%를 할당해도 된다.
+# 기본값 134217728 (128MB)
+# Dynamic 설정을 할 수 없다.
+innodb_buffer_pool_size = 1073741824
+
+innodb_buffer_pool_instances = 2
+
+# 모든 InnoDB 데이터 파일의 위치를 지정.
+innodb_data_home_dir = /mnt/dbstorage/InnoDB/ibData
+
+# 개별적인 InnoDB 데이터 파일과 그 크기를 지정.
+# 기본값은 10MB 크기에 파일명은 ibdata1 이다.
+innodb_data_file_path = ib_data:100M:autoextend
+
+# 기본적으로 InnoDB는 시스템 테이블 스페이스로 불리우는 곳에 모든 테이블이 생성된다.
+# 이 값을 활성화하면 시스템 테이블 스페이스 대신 데이터와 인덱스를 별도의 파일에 저장한다.
+# 확장자는 .ibd
+# 기본값은 0
+# 이 기능은 5.6.1 이상에서 지원한다.
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_file_per_table = 1
+innodb_file_per_table = 1
+
+# InnoDB 시스템 테이블 파일이 꽉차면 자동으로 확장하는데, 확장하는 사이즈 크기를 지정.
+# 최소 1, 최대 1000 값을 지정할 수 있다.
+# 기본값은 64 MB 이다.
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_autoextend_increment = 10MB
+innodb_autoextend_increment = 128
+
+# InnoDB redo log 파일의 생성될 디렉토리 지정. 생성되는 파일의 갯수는 innodb_log_files_in_group 에서 지정.
+# InnoDB 로그 값을 지정하지 않으면 5MB 크기의 ib_logfile0, ib_logfile1 두개 생성된다.
+# Dynamic 설정을 할 수 없다.
+innodb_log_group_home_dir = /mnt/dbstorage/InnoDB/redoLogs
+
+# InnoDB 셧다운 모드 설정. 이 값을 0 이라면 InnoDB는 풀 퍼지, insert 버퍼를 머징 하는 슬로우 다운이 됩니다.
+# 기본값은 1
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_fast_shutdown = 1
+innodb_fast_shutdown = 0
+
+# 로그 그룹에 로그파일 갯수를 지정.
+# 기본값 2
+# Dynamic 설정을 할 수 없다.
+innodb_log_files_in_group = 4
+
+# 로그 그룹에 각 로그 파일의 사이즈를 결정. 1MB에서부터 innodb_buffer_pool_size/innodb_log_files_in_group 나온 값까지 설정하는게 좋다.
+# 기본값은 5MB
+# Dynamic 설정을 할 수 없다.
+innodb_log_file_size = 2G
+
+# 로그 버퍼를 위한 사이즈 지정. 많이 할당할 필요가 없다.
+# 기본값 8388608 (8MB)
+# Dynamic 설정을 할 수 없다.
+innodb_log_buffer_size = 16M
+
+# undo 로그 디렉토리를 지정.
+# Dynamic 설정을 할 수 없다.
+innodb_undo_directory = /mnt/dbstorage/InnoDB/undoLogs
+
+innodb_tmpdir = /mnt/dbstorage/InnoDB/tmp
+
+# InnoDB 는 OS 동시성 쓰레드를 주어진 값만큼 유지한다.
+# 주어진 값에 쓰레드 갯수가 도달하면 실행을 위해서 FIFO 큐에 대기 상태로 놓인다.
+# 기본값은 0 (infinite concurrency)
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_thread_concurrency = 1
+innodb_thread_concurrency = 16
+
+# InnoDB transaction 이 row lock 에 대해서 포기하전에 기다리는 시간.
+# 기본값 50. 단위는 초(second)
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_lock_wait_timeout = 50
+innodb_lock_wait_timeout = 60
+
+# InnoDB에서 트랜잭션이 커밋될때마다 로그를 디스크에 쓸건지 말지 결정.
+# 일반적으로 2로 설정해서 많이 쓴다.
+# 기본값 1
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_flush_log_at_trx_commit = 1
+innodb_flush_log_at_trx_commit = 2
+
+# MySQL 서버가 시작할때에 InnoDB를 복구를 수행하는데, 잘 않되면 서버가 구동되지 않는다.
+# 이때에 이 값을 지정하고 서버를 시작하면 각 숫자에 맞는 복구를 시행하게 된다.
+# 0 이면 복구를 수행하지 않는다.
+# 기본값 1
+# Dynamic 설정을 할 수 없다.
+innodb_force_recovery = 0
+
+# 디스크 쓰기를 할때에 운영체제에 버퍼운영을 무엇으로 할지를 결정.
+# 기본값 fdatasync
+# Dynamic 설정을 할 수 없다.
+innodb_flush_method = O_DIRECT
+
+# 이 기능을 켜면 InnoDB는 데이터를 두번 저장함. 첫째로 doublewrite buffer,
+# 두번째에 실제로 data files 쓴다.
+# 기본값 1
+# Dynamic 설정을 할 수 없다.
+innodb_doublewrite = 1
+
+# 쓰레드가 서스펜드되기전에 InnoDB 뮤텍스가 해제되기어질때까지 쓰레드가 기다리는 시간.
+# 기본값 30
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_sync_spin_loops = 20
+innodb_sync_spin_loops = 20
+
+# autocmmit = 0 일 경우 InnoDB 는 "LOCK TABLES"를 존중한다.
+# 만약 이 값을 활성화하면 autocmmit =0 인 상태에서 "LOCK TABLES" 명령어는
+# 내부적으로 InnoDB는 테이블을 락(lock) 한다.
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_table_locks = 1
+innodb_table_locks = 1
+
+# InnoDB 큐를 조이닝하기전에 InnoDB 쓰레드를 얼마나 잠재울 것인지 설정.
+# 기본값은 10000, 단위는 microseconds
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_thread_sleep_delay = 10000
+innodb_thread_sleep_delay = 1000
+
+# purge 연산이 꾸물거릴때에 INSERT, UPDATE, DELETE 연산을 얼마나 지연시킬건지를 설정.
+# 기본값은 0, 단위는 millisconds 이다.
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_max_purge_lag = 10000
+innodb_max_purge_lag = 0
+
+# 동시에 커밋할수 있는 쓰레드 개수. 0 은 제한을 두지 않는다.
+# 기본값은 0
+# 이 설정은 런타임에서 0 에서 다른 값으로 변경할 수 없다.
+# 0이 아닌 값을 0으로 런타임으로 변경할 수 있다.
+# 제한적으로 Dynamic 설정을 할수 있다. SET GLOBAL innodb_commit_concurrency = 100
+innodb_commit_concurrency = 0
+
+# InnoDB 가 동시성으로 들어갈수 있는 쓰레드의 갯수.
+# 기본값은 500
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_concurrency_tickets = 500
+innodb_concurrency_tickets = 500
+
+##--------------------------------------------------------------------
+# mysqldump
+##--------------------------------------------------------------------
+[mysqldump]
+
+# 테이블을 덤프할때에는 MySQL 서버는 메모리 버퍼링을 사용합니다. 하지만 큰 테이블을 덤프할때에 메모리 버퍼링을 사용하면 문제가 될 수 있습니다.
+# 이 메모리 버퍼링을 끄기 위해서 다음과 같이 합니다.
+# 기본은 메모리 버퍼링 사용하기 입니다.
+quick
+
+# 서버와 클라이언트간 통신에 사용할 최대 버퍼 사이즈.
+# 기본값 1GB
+max_allowed_packet = 1G
+
+##--------------------------------------------------------------------
+# mysql console
+##--------------------------------------------------------------------
+[mysql]
+
+# mysql 에서 사용할 기본 언어셋 지정.
+default-character-set = utf8
+
+# MySQL 에서도 리눅스의 명령해완성기능, 즉 탭을 누르면 명령형이 완성는 기능, 을 지원합니다. 명령행뿐만 아니라 칼럼명, 테이블 이름, 데이터베이스명등도 완성시켜줍니다.
+# 문제는 이러한 기능을 하기위해서는 각종 정보를 모두 읽고 분석해 메모리에 적해놔야 합니다.
+# 필요한 기능하긴 하지만 대용량을 운영할 경우 사용하지 않는게 좋습니다.
+no-auto-rehash
+
+# MySQL 에서 경고(Warning)가 발생하면 표시는 하지 않지만 결과값으로 있다없다정도만 보여주고, "SHOW WARNINGS;"를 이용해서 봐야 합니다.
+# 그러지 말고 경고가 발생하면 그냥 표시하도록 설정을 해줍니다.
+show-warnings
+
+# MySQL 클라이언트의 프롬프트를 바꿉니다.
+prompt=\u@\h:\d\_\R:\m:\\s>
+
+# paging 기능을 지원합니다.
+pager="less -n -i -F -X -E"
+
+##--------------------------------------------------------------------
+# mysql client
+##--------------------------------------------------------------------
+[client]
+socket  = /opt/mysql/run/mysql.sock
+port = 3306
