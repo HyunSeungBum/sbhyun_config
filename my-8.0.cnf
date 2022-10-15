@@ -26,19 +26,28 @@ server-id = 1
 # 서버를 구동할 시스템 사용자 지정.
 user = mysql
 basedir = /opt/mysql
+
 # 이 디렉토리의 소유권과 그룹은 user 에서 지정한 사용자와 그룹이어야 한다.
 datadir = /mnt/dbstorage/mysql/data
+
 # 이 디렉토리는 Mysql 서버가 내부적 작업을 할때 임시로 사용하게 된다.
 # 예를들어 대량의 select 처리를 위해서 임시 테이블을 만들거나 할 경우에 여기에 임시로 파일이 생성될 수 있다.
 tmpdir  = /mnt/dbstorage/mysql/tmp
 socket  = /opt/mysql/run/mysql.sock
 pid-file = /opt/mysql/run/mysqld.pid
+
 # 외부 락킹(locking), 시스템 락킹, 을 사용하지 않도록 한다. 이 설정은 오직 MyISAM 테이블에 접근할때만 영향을 준다.
 skip-external-locking
 
 # 문자셋 지정.
 character-set-server = utf8
 collation-server = utf8_general_ci
+
+# 타임존 설정.
+# 초기 타임존은 'SYSTEM' 이며 이는 운영체제의 타임존과 같게 설정 된다.
+# UTC 폼 형식으로 지정한다.
+# Dynamic 설정을 할수 있다. SET GLOBAL time_zone = '+9:00'
+default_time_zone='+9:00'
 
 # 기본 스토리지 엔진.
 # MySQL 서버가 지원하는 스토리지 엔진중에 하나를 선택할 수 있다.
@@ -305,6 +314,11 @@ myisam_recover_options = DEFAULT
 ##--------------------------------------------------------------------
 # InnoDB behavior
 ##--------------------------------------------------------------------
+
+# 트랜잭션 레벨을 지정합니다.
+# InnoDB 는 READ UNCOMMITTED, READ COMMITTED, REPEATABLE READ, SERIALIZABLE 의 트랜잭션 레벨을 지원한다.
+# 기본 값으로 REPEATABLE-READ 사용.
+transaction-isolation = REPEATABLE-READ
 
 # 5.7 이후에 기본값이 Barracuda 로 바뀌었으며
 # 가까운 미래에 없어질 것이다. 원래 이 옵션은 5.1 버전으로 다운그레이드를 위해서
