@@ -320,18 +320,6 @@ myisam_recover_options = DEFAULT
 # 기본 값으로 REPEATABLE-READ 사용.
 transaction-isolation = REPEATABLE-READ
 
-# 5.7 이후에 기본값이 Barracuda 로 바뀌었으며
-# 가까운 미래에 없어질 것이다. 원래 이 옵션은 5.1 버전으로 다운그레이드를 위해서
-# 만들어졌으며 5.1 은 더 이상 지원을 하지 않게됨에 따라서 필요하지 않게 되었다.
-# 기본값 Barracuda
-# Dynamic 설정을 할수 있다. SET GLOBAL innodb_file_format = Barracuda
-# 이미 존재하는 InnoDB 테이블스페이스 파일의 포맷에는 영향을 주지 않는다.
-# 모든 row format 테이블을 지원하는 general 테이블스페이스에는 적용되지 않는다.
-# DYNAMIC row format 을 사용해 테이블을 생성할 경우에는 innodb_file_format 옵션이 무시되고
-# 강제로 Barracuda 포맷을 사용한다.
-# COMPRESSED row format 은 반드시 Barracuda 로 지정해야 한다.
-# innodb_file_format = Barracuda
-
 # InnoDB의 백그라운드 쓰레드인 I/O 쓰레드의 읽고 쓰기 쓰레드의 갯수를 정합니다.
 # innodb_read_io_threads 기본값 4
 # innodb_write_io_threads 기본값 4
