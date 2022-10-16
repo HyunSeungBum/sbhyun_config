@@ -8,6 +8,8 @@
 # mkdir -p /mnt/dbstorage/InnoDB/redoLogs
 # mkdir -p /mnt/dbstorage/InnoDB/undoLogs
 # mkdir -p /mnt/dbstorage/InnoDB/tmp
+# mkdir -p /mnt/dbstorage/InnoDB/ibData
+# mkdir -p /mnt/dbstorage/InnoDB/doublewrite
 # mkdir -p /mnt/dbstorage/mysql/tmp
 # mkdir -p /mnt/dbstorage/mysql/data
 # mkdir -p /mnt/dbstorage/mysql/binlog
@@ -40,8 +42,8 @@ pid-file = /opt/mysql/run/mysqld.pid
 skip-external-locking
 
 # 문자셋 지정.
-character-set-server = utf8
-collation-server = utf8_general_ci
+character-set-server = utf8mb4
+collation-server = utf8mb4_general_ci
 
 # 타임존 설정.
 # 초기 타임존은 'SYSTEM' 이며 이는 운영체제의 타임존과 같게 설정 된다.
@@ -320,18 +322,6 @@ myisam_recover_options = DEFAULT
 # 기본 값으로 REPEATABLE-READ 사용.
 transaction-isolation = REPEATABLE-READ
 
-# 5.7 이후에 기본값이 Barracuda 로 바뀌었으며
-# 가까운 미래에 없어질 것이다. 원래 이 옵션은 5.1 버전으로 다운그레이드를 위해서
-# 만들어졌으며 5.1 은 더 이상 지원을 하지 않게됨에 따라서 필요하지 않게 되었다.
-# 기본값 Barracuda
-# Dynamic 설정을 할수 있다. SET GLOBAL innodb_file_format = Barracuda
-# 이미 존재하는 InnoDB 테이블스페이스 파일의 포맷에는 영향을 주지 않는다.
-# 모든 row format 테이블을 지원하는 general 테이블스페이스에는 적용되지 않는다.
-# DYNAMIC row format 을 사용해 테이블을 생성할 경우에는 innodb_file_format 옵션이 무시되고
-# 강제로 Barracuda 포맷을 사용한다.
-# COMPRESSED row format 은 반드시 Barracuda 로 지정해야 한다.
-# innodb_file_format = Barracuda
-
 # InnoDB의 백그라운드 쓰레드인 I/O 쓰레드의 읽고 쓰기 쓰레드의 갯수를 정합니다.
 # innodb_read_io_threads 기본값 4
 # innodb_write_io_threads 기본값 4
@@ -436,16 +426,24 @@ innodb_autoextend_increment = 128
 # Dynamic 설정을 할 수 없다.
 innodb_log_group_home_dir = /mnt/dbstorage/InnoDB/redoLogs
 
+# MySQL 8.0.30 에서 도입된 설정 값이다.
+# 이값은 innodb_log_files_in_group * innodb_log_file_size = innodb_redo_log_capacity 로 계산 된다.
+# 기본값은 100MB 다.
+# Dynamic 설정할 수 있다.
+innodb_redo_log_capacity = 1048576000
+
 # InnoDB 셧다운 모드 설정. 이 값을 0 이라면 InnoDB는 풀 퍼지, insert 버퍼를 머징 하는 슬로우 다운이 됩니다.
 # 기본값은 1
 # Dynamic 설정을 할수 있다. SET GLOBAL innodb_fast_shutdown = 1
 innodb_fast_shutdown = 0
 
+# MySQL 8.0.30 에서 Deprecate 됐다. 조만간 없어질 것이다.
 # 로그 그룹에 로그파일 갯수를 지정.
 # 기본값 2
 # Dynamic 설정을 할 수 없다.
 innodb_log_files_in_group = 4
 
+# MySQL 8.0.30 에서 Deprecate 됐다. 조만간 없어질 것이다.
 # 로그 그룹에 각 로그 파일의 사이즈를 결정. 1MB에서부터 innodb_buffer_pool_size/innodb_log_files_in_group 나온 값까지 설정하는게 좋다.
 # 기본값은 5MB
 # Dynamic 설정을 할 수 없다.
@@ -491,11 +489,19 @@ innodb_force_recovery = 0
 # Dynamic 설정을 할 수 없다.
 innodb_flush_method = O_DIRECT
 
-# 이 기능을 켜면 InnoDB는 데이터를 두번 저장함. 첫째로 doublewrite buffer,
-# 두번째에 실제로 data files 쓴다.
-# 기본값 1
+# 이 기능을 켜면 InnoDB는 데이터를 두번 저장함. InnoDB 는 데이터 손실을 방지하기 위해서 두번 쓰기를 하는데,
+# 이를 Double Write 기능이라고 한다. InnoDB Pool 에서 Flush 된 데이터를 Disk 에 쓰기전에 Buffer 에 임시로
+# 저장 한다. Buffer 라고 했지만 사실은 Disk 상에 파일이다.
+# MySQL 8.0.30 부터는 ON, OFF, DETECT_ONLY, DETECT_AND_RECOVER
+# MySQL 8.0.29 까지는 ON, OFF 만 가능하다.
+# 기본값 ON
+# MySQL 8.0.30 부터는 Dynamic 설정을 할 수 있지만 그 이하는 Dynamic 설정할 수 없다.
+innodb_doublewrite = DETECT_AND_RECOVER
+
+# doublewrite 파일을 쓸 디렉토리를 정의 한다. 지정하지 않으면 innodb_data_home_dir 를 사용한다.
+# MySQL 8.0.20 부터 사용할 수 있다.
 # Dynamic 설정을 할 수 없다.
-innodb_doublewrite = 1
+innodb_doublewrite_dir = /mnt/dbstorage/InnoDB/doublewrite
 
 # 쓰레드가 서스펜드되기전에 InnoDB 뮤텍스가 해제되기어질때까지 쓰레드가 기다리는 시간.
 # 기본값 30
