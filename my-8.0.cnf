@@ -1,13 +1,14 @@
-# 이 파일은 MySQL 8.0.11 x86_64 기준으로 작성되었습니다.
+# 이 파일은 MySQL 8.0.31 x86_64 기준으로 작성되었습니다.
 # http://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html 를 참조 하였습니다.
 # 저장소에서 구하실 수 있습니다. https://github.com/HyunSeungBum/sbhyun_config.git
 # cd /opt
-# chgrp mysql -R mysql-8.0.11; cd mysql-8.0.11
+# chgrp mysql -R mysql-8.0.31; cd mysql-8.0.31
 # mkdir logs run
 # chown mysql.mysql logs; chown mysql.mysql run
 # mkdir -p /mnt/dbstorage/InnoDB/redoLogs
 # mkdir -p /mnt/dbstorage/InnoDB/undoLogs
 # mkdir -p /mnt/dbstorage/InnoDB/tmp
+# mkdir -p /mnt/dbstorage/InnoDB/innodb_tmp
 # mkdir -p /mnt/dbstorage/InnoDB/ibData
 # mkdir -p /mnt/dbstorage/InnoDB/doublewrite
 # mkdir -p /mnt/dbstorage/mysql/tmp
@@ -407,6 +408,16 @@ innodb_data_home_dir = /mnt/dbstorage/InnoDB/ibData
 # 기본값은 10MB 크기에 파일명은 ibdata1 이다.
 innodb_data_file_path = ib_data:100M:autoextend
 
+# 글로벌 임시 테이블스페이스 데이터 파일과 그 크기를 지정.
+# 만일 지정하지 않으면 innodb_data_home_dir 에 ibtmp1 파일을 생성하고 자동 확장되도록 한다.
+# Dynamic 설정을 할 수 없다.
+innodb_temp_data_file_path = ibtmp1:50M;ibtmp2:12M:autoextend:max:128M
+
+# MySQL 시작시에 세션 임시 테이블스페이스 풀(a pool of session temporary tablespaces) 생성을 위한 디렉토리 정의.
+# 만일 지정하지 않으면 데이터 디렉토리에 #innodb_temp 이름으로 생성된다.
+# Dynamic 설정할 수 없다.
+innodb_temp_tablespaces_dir = /mnt/dbstorage/InnoDB/innodb_temp
+
 # 기본적으로 InnoDB는 시스템 테이블 스페이스로 불리우는 곳에 모든 테이블이 생성된다.
 # 이 값을 활성화하면 시스템 테이블 스페이스 대신 데이터와 인덱스를 별도의 파일에 저장한다.
 # 확장자는 .ibd
@@ -422,7 +433,7 @@ innodb_file_per_table = 1
 innodb_autoextend_increment = 128
 
 # InnoDB redo log 파일의 생성될 디렉토리 지정. 생성되는 파일의 갯수는 innodb_log_files_in_group 에서 지정.
-# InnoDB 로그 값을 지정하지 않으면 5MB 크기의 ib_logfile0, ib_logfile1 두개 생성된다.
+# innodb_log_files_in_group 디렉토리를 지정한다고 하더라도 그 안에 '#innodb_redo' 디렉토리를 생성한다.
 # Dynamic 설정을 할 수 없다.
 innodb_log_group_home_dir = /mnt/dbstorage/InnoDB/redoLogs
 
