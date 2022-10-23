@@ -443,11 +443,6 @@ innodb_log_group_home_dir = /mnt/dbstorage/InnoDB/redoLogs
 # Dynamic 설정할 수 있다.
 innodb_redo_log_capacity = 1048576000
 
-# InnoDB 셧다운 모드 설정. 이 값을 0 이라면 InnoDB는 풀 퍼지, insert 버퍼를 머징 하는 슬로우 다운이 됩니다.
-# 기본값은 1
-# Dynamic 설정을 할수 있다. SET GLOBAL innodb_fast_shutdown = 1
-innodb_fast_shutdown = 0
-
 # MySQL 8.0.30 에서 Deprecate 됐다. 조만간 없어질 것이다.
 # 로그 그룹에 로그파일 갯수를 지정.
 # 기본값 2
@@ -459,6 +454,11 @@ innodb_log_files_in_group = 4
 # 기본값은 5MB
 # Dynamic 설정을 할 수 없다.
 innodb_log_file_size = 2G
+
+# InnoDB 셧다운 모드 설정. 이 값을 0 이라면 InnoDB는 풀 퍼지, insert 버퍼를 머징 하는 슬로우 다운이 됩니다.
+# 기본값은 1
+# Dynamic 설정을 할수 있다. SET GLOBAL innodb_fast_shutdown = 1
+innodb_fast_shutdown = 0
 
 # 로그 버퍼를 위한 사이즈 지정. 많이 할당할 필요가 없다.
 # 기본값 8388608 (8MB)
