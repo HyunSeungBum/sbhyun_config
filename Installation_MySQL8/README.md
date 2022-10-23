@@ -44,18 +44,24 @@ MySQL 8.x 는 cmake 를 이용하기 때문에 다음과 같이 cmake 명령어�
 ```console
 
 cmake -DCMAKE_INSTALL_PREFIX=/opt/mysql-8.0.31 \
--DDEFAULT_CHARSET=utf8 \
--DDEFAULT_COLLATION=utf8_general_ci \
+-DSYSTEMD_PID_DIR=/opt/mysql-8.0.31/run \
+-DDEFAULT_CHARSET=utf8mb4 \
+-DDEFAULT_COLLATION=utf8mb4_general_ci \
 -DENABLED_LOCAL_INFILE=1 \
 -DWITH_EXTRA_CHARSETS=all \
--DWITH_SYSTEMD=1 \
--DSYSTEMD_PID_DIR=/opt/mysql-8.0.31/run \
--WITH_EDITLINE=bundled \
--WITH_LIBEVENT=bundled \
+-DWITH_NUMA=ON \
+-DWITH_EDITLINE=bundled \
+-DWITH_ICU=bundled \
+-DWITH_LIBEVENT=bundled \
+-DWITH_LZ4=bundled \
+-DWITH_PROTOBUF=bundled \
+-DWITH_SSL=yes \
+-DWITH_ZSTD=bundled \
+-DWITH_SYSTEMD=ON \
 -WITH_ZLIB=bundled \
 -DWITH_BOOST=/usr/src/mysql-8.0.31/boost/boost_1_77_0 \
 -DWITH_SSL=system  \
--DFORCE_INSOURCE_BUILD=1
+-DFORCE_INSOURCE_BUILD=ON
 
 ```
 
