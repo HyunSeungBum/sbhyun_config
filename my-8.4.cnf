@@ -71,7 +71,12 @@ skip-name-resolve
 # 최대 동시 접속 연결을 지정. 무턱대고 크게 잡을게 아니라 적절하게 잡아야 한다.
 # 이 값을 초과하면 "Too many connections error" 메시지를 보여준다.
 # 최대 유효 값은 open_files_limit의 유효 값에서 810을 뺀 값과 max_connections에 실제로 설정된 값 중 더 작은 값이 된다.
+# systemd 로 운영되는 mariadb 의 경우에는 systemd's 기본값 TasksMax (대략 4915/service) 로 인해서 max_connections 값을 제한한다.
+# 이를 피하기 위해서 다음과 같이 설정해줄 필요가 있다.
+# [Service]
+# TasksMax=infinity
 # 기본값: 151
+# 범위: 10 ~ 10000
 # Dynamic 설정을 할수 있다. SET GLOBAL max_connections = 151
 max_connections = 151
 
