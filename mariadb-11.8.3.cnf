@@ -166,7 +166,7 @@ max_allowed_packet = 1073741824
 ##--------------------------------------------------------------------
 
 # 얼마나 자주 binary log 를 디스크로 동기화하는지를 제어한다.
-# sync_binlog = 0: MariaDB 서버에 의한 binary log 를 디스크로 동기화를 비활성화. 대신에 MySQL 서버는
+# sync_binlog = 0: MariaDB 서버에 의한 binary log 를 디스크로 동기화를 비활성화. 대신에 MariaDB 서버는
 # 운영시스템에 의존해 binary log 를 디스크로 플러쉬한다. 이 설정은 최고의 성능을 제공하지만
 # 서버 크래쉬나 정전에 대해 커밋된 트랜잭션이 플러쉬 되지 않아 데이터 손실이 될 수 있다.
 # sync_binlog = 1: 트랜잭션이 커밋되는 동안 binary log 를 디스크로 동기화하도록 한다. 
@@ -206,7 +206,7 @@ log_bin = /opt/dbstorage/mariadb/binlogs/localhost-01-bin
 # 최대 변수 길이는 256 이며 기본 위치는 data 디렉토리다.
 # 범위: filename
 # Dynamic 설정을 할수 없다.
-#log_bin_basename = /opt/dbstorage/mysql/binlog/localhost-01-bin
+#log_bin_basename = /opt/dbstorage/mariadb/binlogs/localhost-01-bin
 
 # binary log 가 활성화된 경우
 # 이 설정은 하나의 연결마다 트랜잭션중에 바이너리 로그 변경의 기록을 들고있는 캐쉬의 크기를 결정한다. 
