@@ -12,7 +12,6 @@
 # mkdir -p /opt/dbstorage/InnoDB/ibData
 # mkdir -p /opt/dbstorage/InnoDB/doublewrite
 # mkdir -p /opt/dbstorage/mysql/tmp
-# mkdir -p /opt/dbstorage/mysql/data
 # mkdir -p /opt/dbstorage/mysql/binlog
 # mkdir -p /opt/dbstorage/mysql/logs
 # chown -R mysql: /opt/dbstorage
@@ -31,7 +30,7 @@ user = mysql
 basedir = /opt/mysql
 
 # 이 디렉토리의 소유권과 그룹은 user 에서 지정한 사용자와 그룹이어야 한다.
-datadir = /opt/dbstorage/mysql/data
+datadir = /opt/dbstorage/mysql
 
 # 이 디렉토리는 Mysql 서버가 내부적 작업을 할때 임시로 사용하게 된다.
 # 예를들어 대량의 select 처리를 위해서 임시 테이블을 만들거나 할 경우에 여기에 임시로 파일이 생성될 수 있다.
