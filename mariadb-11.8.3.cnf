@@ -1,3 +1,20 @@
+# 이 MariaDB 설정은 버전 11.8.3 전용입니다.
+# 이전 버전과 호환은 되지 않기 때문에 그대로 사용되어서는 안됩니다.
+
+# cd /opt/mariadb-11.8.3
+# mkdir run
+# chown -R root:mariadb
+# chown -R mariadb:mariadb run
+# mkdir -p /opt/dbstorage/tmp
+# mkdir -p /opt/dbstorage/mariadb/binlogs
+# mkdir -p /opt/dbstorage/mariadb/logs
+# mkdir -p /opt/dbstorage/Aria
+# mkdir -p /opt/dbstorage/InnoDB/ibData
+# mkdir -p /opt/dbstorage/InnoDB/tmp
+# mkdir -p /opt/dbstorage/InnoDB/redoLogs
+# mkdir -p /opt/dbstorage/InnoDB/undoLogs
+# chown -R mariadb: /opt/dbstorage
+
 [mariadbd]
 ##--------------------------------------------------------------------
 # MariaDB 의 기본 설정들.
