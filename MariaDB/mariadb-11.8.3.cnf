@@ -179,6 +179,91 @@ connect_timeout = 10
 max_allowed_packet = 1073741824
 
 ##--------------------------------------------------------------------
+# Replication
+##--------------------------------------------------------------------
+
+# Primary 서버를 위해 리플리케이션 도메인 새로운 GTID 를 기록할지 결정하는데 사용한다.
+# 이 값은 SUPER 권한을 가진 사용자에 의해서 Session 레벨에서도 설정할 수 있다.
+# mariadb-binlog 에서 GTID 이벤트의 도메인 ID 를 보존하기 위해서 사용된다.
+# 기본값: 0
+# 범위: 0 ~ 4294967295
+# Dynamic 설정할 수 있다. SET GLOBAL, SESSION gtid_domain_id = 1
+gtid_domain_id = 1
+
+# 모든 binlog 파일에 GTID 인덱스를 생성하도록 한다. 
+# GTID 인덱스는 binlog 에서 GTID 를 빠르게 찾도록 해준다.
+# 기본값: ON
+# Dynamic 설정할 수 있다. SET GLOBAL binlog_gtid_index = ON
+binlog_gtid_index = ON
+
+# binlog GTID 인덱스를 위한 페이지 크기
+# 기본값: 4096
+# 범위: 64 ~ 16777216
+# Dynamic 설정할 수 있다. SET GLOBAL binlog_gtid_index_page_size = 4096 
+binlog_gtid_index_page_size= 4096
+
+#--------------------- Replica 에서만 설정 --------------------------------#
+# 지정된 이름과 일치하는 데이터베이스에 영향을 주는 명령문과 트랜잭션을 Replica에 적용하도록 설정할 수 있게 해준다.
+# statement-based logging 하는 크로스 데이터베이스 업데이트에는 작동하지 않는다.
+# 여러 값을 콤마(,) 이용해 지정하면 된다.
+# 지정하지 않으면 모든 데이터베이스에 적용된다.
+# Dynamic 설정할 수 있다. SET GLOBAL replicate_do_db = a
+#replicate_do_db = 
+
+# 지정된 이름과 일치하는 데이터베이스에 영향을 주는 명령문과 트랜잭션을 Replica에 적용하지 않도록 한다.
+# statement-based logging 하는 크로스 데이터베이스 업데이트에는 작동하지 않는다.
+# 여러 값을 콤마(,) 이용해 지정하면 된다.
+# Dynamic 설정할 수 있다. SET GLOBAL replicate_ignore_db = a
+#replicate_ignore_db = 
+
+# 지정된 이름과 일치하는 테이블에 영향을 주는 명령문과 트랜잭션을 Replica에 적용하도록 설정할 수 있게 해준다.
+# 테이블 이름의 포맷은 dbname.tablename 여야 한다.
+# statement-based logging 하는 크로스 데이터베이스 업데이트에는 작동하지 않는다.
+# 여러 값을 콤마(,) 이용해 지정하면 된다.
+# 지정하지 않으면 모든 테이블에 적용된다.
+# Dynamic 설정할 수 있다. SET GLOBAL replicate_do_table = spring.account
+#replicate_do_table = 
+
+# 지정된 이름과 Wild pattern과 일치하는 테이블에 영향을 주는 명령문과 트랜잭션을 Replica에 적용하도록 설정할 수 있게 해준다.
+# Wild pattern 테이블은 LIKE 명령문과 동일하다.
+# statement-based logging 하는 크로스 데이터베이스 업데이트에는 작동하지 않는다.
+# 여러 값을 콤마(,) 이용해 지정하면 된다.
+# 지정하지 않으면 모든 테이블에 적용된다.
+# Dynamic 설정할 수 있다. SET GLOBAL replicate_wild_do_table = 'spring.account%'
+#replicate_wild_do_table =
+
+# 지정된 이름과 일치하는 테이블에 영향을 주는 명령문과 트랜잭션을 Replica에 적용하지 않도록 한다.
+# 테이블 이름의 포맷은 dbname.tablename 여야 한다.
+# statement-based logging 하는 크로스 데이터베이스 업데이트에는 작동하지 않는다.
+# 여러 값을 콤마(,) 이용해 지정하면 된다.
+# Dynamic 설정할 수 있다. SET GLOBAL replicate_ignore_table = spring.account
+#replicate_ignore_table = 
+
+# 지정된 이름과 Wild pattern과 일치하는 테이블에 영향을 주는 명령문과 트랜잭션을 Replica에 적용하지 않도록 한다.
+# Wild pattern 테이블은 LIKE 명령문과 동일하다.
+# statement-based logging 하는 크로스 데이터베이스 업데이트에는 작동하지 않는다.
+# 여러 값을 콤마(,) 이용해 지정하면 된다.
+# Dynamic 설정할 수 있다. SET GLOBAL replicate_wild_ignore_table = 'spring.account%'
+#replicate_wild_ignore_table = 
+
+# 이 옵션은 복제서버에서 데이터베이스 이름을 바꾸도록 설정해 준다.
+# 포맷은 primary_database->replica_database 이다.
+# 만약 복제서버에서 기본 데이터베이스가 primary_database 인 binary log 이벤트를 감지하면,
+# statement-based logging 하는 크로스 데이터베이스 업데이트에는 작동하지 않는다.
+# 이 옵션은 테이블과 관련된 명령문에만 영향을 준다.
+# 데이터베이스 관련한 CREATE DATABASE, ALTER DATABASE, DROP DATABASE 와 같은 명령문에는 적용되지 않는다.
+# Dynamic 설정할 수 있다. SET GLOBAL replicate_rewrite_db =  primary_database->replica_database
+#replicate_rewrite_db = 
+
+# 기본값 0 은 Primary 서버로부터 전달받은 복제본을 업데이트할때, Replica 서버에 binary 로그에 기록하지 않는다.
+# 1 은 Binary 로그에 기록하도록 한다. 
+# 이 기능이 효과를 발휘하려면 Replica 서버의 binary 로그가 활성화 되어 있어야 한다.
+# 데이시 체인 복제를 위해서는 반드시 1로 설정해야 한다.
+# 기본값: OFF
+# Dynamic 설정할 수 없다.
+#log_slave_updates = OFF
+
+##--------------------------------------------------------------------
 # Bin Log and Replication
 ##--------------------------------------------------------------------
 
