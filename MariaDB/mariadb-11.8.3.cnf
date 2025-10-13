@@ -218,6 +218,17 @@ binlog_format = ROW
 # Dynamic 설정을 할 수 없다.
 log_bin = /opt/dbstorage/mariadb/binlogs/localhost-01-bin
 
+# binlog_expire_logs_seconds 는 이렇게 생성된 파일들에 보관 기간을 설정한다. 
+# 만일 0 이 아니라면 binary logs 는 binlog_expire_logs_seconds 초 이후에 퍼지될 것이다.
+# 바이너리 로그 파일은 자동으로 삭제 되는데,
+# 바이너리 로그가 로테이션 될때나  서버가 시작될때에 삭제 된다.
+# 만일 수동으로 삭제할려면, PURGE BINARY LOGS 문을 사용하라.
+# MariaDB 10.6.1 부터 binlog_expire_logs_seconds, expire_logs_days 는 Alias 형태인데, 한쪽이 변경되면 자동으로 다른쪽에 반영된다.
+# 기본값: 0 seconds
+# 범위: 0 ~ 8553600
+# Dynamic 설정할 수 있다. SET GLOBAL binlog_expire_logs_seconds = 2592000
+binlog_expire_logs_seconds = 2592000
+
 # Binary log 파일 이름을 정한다.
 # 파일의 경로와 함께 파일명을 지정하면 된다.
 # 최대 변수 길이는 256 이며 기본 위치는 data 디렉토리다.
@@ -241,17 +252,6 @@ binlog_cache_size = 32768
 # 범위: 4096 ~ 1073741824
 # Dyanmic 설정할 수 있다. SET GLOBAL max_binlog_size = 1073741824
 max_binlog_size = 1073741824
-
-# binlog_expire_logs_seconds 는 이렇게 생성된 파일들에 보관 기간을 설정한다. 
-# 만일 0 이 아니라면 binary logs 는 binlog_expire_logs_seconds 초 이후에 퍼지될 것이다.
-# 바이너리 로그 파일은 자동으로 삭제 되는데,
-# 바이너리 로그가 로테이션 될때나  서버가 시작될때에 삭제 된다.
-# 만일 수동으로 삭제할려면, PURGE BINARY LOGS 문을 사용하라.
-# MariaDB 10.6.1 부터 binlog_expire_logs_seconds, expire_logs_days 는 Alias 형태인데, 한쪽이 변경되면 자동으로 다른쪽에 반영된다.
-# 기본값: 0 seconds
-# 범위: 0 ~ 8553600
-# Dynamic 설정할 수 있다. SET GLOBAL binlog_expire_logs_seconds = 2592000
-binlog_expire_logs_seconds = 2592000
 
 ##--------------------------------------------------------------------
 # Logging
