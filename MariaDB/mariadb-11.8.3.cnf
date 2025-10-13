@@ -13,6 +13,7 @@
 # mkdir -p /opt/dbstorage/InnoDB/tmp
 # mkdir -p /opt/dbstorage/InnoDB/redoLogs
 # mkdir -p /opt/dbstorage/InnoDB/undoLogs
+# mkdir -p /opt/dbstorage/RelayLogs
 # chown -R mariadb: /opt/dbstorage
 
 [mariadbd]
