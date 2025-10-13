@@ -182,6 +182,9 @@ max_allowed_packet = 1073741824
 # Replication
 ##--------------------------------------------------------------------
 
+# master 의 binlog 에서 I/O 리플리케이션 쓰레드가 어디에 있는지를 마스터가 기억하는 파일 및 경로
+master_info_file = /opt/dbstorage/mariadb/binlogs/master.info
+
 # Primary 서버를 위해 리플리케이션 도메인 새로운 GTID 를 기록할지 결정하는데 사용한다.
 # 이 값은 SUPER 권한을 가진 사용자에 의해서 Session 레벨에서도 설정할 수 있다.
 # mariadb-binlog 에서 GTID 이벤트의 도메인 ID 를 보존하기 위해서 사용된다.
@@ -203,6 +206,25 @@ binlog_gtid_index = ON
 binlog_gtid_index_page_size= 4096
 
 #--------------------- Replica 에서만 설정 --------------------------------#
+
+# relay 로그를 위한 파일이름.
+# Dynamic 설정할 수 없다.
+#relay_log = /opt/dbstorage/RelayLogs/localhost-01-relay
+
+# relay log 인덱스 파일이 이름.
+# 이 파일은 마지막 relay log의 목록을 유지한다.
+# Dynamic 설정할 수 없다.
+#relay_log_index = /opt/dbstorage/RelayLogs/localhost-01-relay.index
+
+# CHANGE MASTER 문에서 사용되는 RELAY_LOG_FILE 및 RELAY_LOG_POS 옵션이 기록되는 파일의 이름과 위치.
+# Dynamic 설정할 수 없다.
+#relay_log_info_file = /opt/dbstorage/RelayLogs/relay-log.info
+
+# 1 로 설정하면 relay 로그가 더 이상 필요하지 않으면 즉각 퍼지한다.
+# 기본값: ON
+# Dynamic 설정할 수 있다. SET GLOBAL relay_log_purge = 1
+#relay_log_purge = 1
+
 # 지정된 이름과 일치하는 데이터베이스에 영향을 주는 명령문과 트랜잭션을 Replica에 적용하도록 설정할 수 있게 해준다.
 # statement-based logging 하는 크로스 데이터베이스 업데이트에는 작동하지 않는다.
 # 여러 값을 콤마(,) 이용해 지정하면 된다.
